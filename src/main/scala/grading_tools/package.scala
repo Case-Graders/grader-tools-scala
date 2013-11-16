@@ -21,12 +21,13 @@ package object grading_tools {
     for {
       regex(caseID, attempt, fileName) <- regex findFirstIn file.toString
       cleanFileName <- cleanFileName(fileName)
-      caseIDDirectory = new File(baseDir, caseID)
+    }{
+      val caseIDDirectory = new File(baseDir, caseID)
       caseIDDirectory.mkdir()
-      attemptDirectory: File = new File(caseIDDirectory, attempt)
+      val attemptDirectory = new File(caseIDDirectory, attempt)
       attemptDirectory.mkdir()
       file.renameTo(new File(attempt, cleanFileName))
-    } yield ()
+    }
   }
 
   private def cleanFileName(fileName: String): Option[String] =
