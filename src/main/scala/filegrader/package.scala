@@ -1,4 +1,4 @@
-import java.io.File
+import java.io.{FileOutputStream, FileInputStream, File}
 import java.nio.file.Files
 import scala.sys.process._
 import utils._
@@ -13,7 +13,10 @@ import utils._
 package object filegrader {
   val attemptGradeFileName = "GRADE_FILE"
   val attemptGradeFileTemplateName = "GRADE_FILE_TEMPLATE"
-  def openWithEditorAndBlock(files: File*): Unit = (Seq("vim", "-O") ++ files.map(_.toString)).!
+  def openWithEditorAndBlock(files: File*): Unit = {
+    val console = System.console()
+    (Seq("vim", "-O") ++ files.map(_.toString)) #> console.writer() #< input !
+  }
 
   def gradeAttempt(attemptDirectory: File): Unit = for {
     attemptGradeFile <- writeAttemptGradeFile(attemptDirectory)
